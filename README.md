@@ -1,19 +1,19 @@
 
-# PythonBBDD
+PythonBBDD
 Realizar tres programas, uno para cada BBDD ( Oracle, Mariadb y Postgres) con Python.
 
 
-# Mostrar los trabajadores con su provincia y los camiones asignados.
+1.Mostrar los trabajadores con su provincia y los camiones asignados.
 
-# Pedir número del trabajador y mostrar toda su información. 
+2.Pedir número del trabajador y mostrar toda su información. 
 
-# Mostrar los datos de los trabajadores pidiendo la matricula del camion.
+3.Mostrar los datos de los trabajadores pidiendo la matricula del camion.
 
-# inserción de datos de un nuevo camión pidiendo la matricula, fecha de alta y peso máximo.
+4.inserción de datos de un nuevo camión pidiendo la matricula, fecha de alta y peso máximo.
 
-# Pedir DNI del conductor para eliminar el camión.
+5.Pedir DNI del conductor para eliminar el camión.
 
-# pedir nombre del trabajador para actualizar el número telefono y el municipio.
+6.pedir nombre del trabajador para actualizar el número telefono y el municipio.
 
 
 Las tablas seleccionadas de la base de datos: 

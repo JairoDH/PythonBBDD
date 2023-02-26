@@ -82,3 +82,15 @@ except MySQLdb.Error as e:
 print("Conectado")
 
 matri = input("Introduce la matrícula (AAAA000): ")
+fecha = input("Introduce la fecha de alta (YYYY-MM-DD): ")
+peso = int(input("Introduce el peso máximo a transportar: "))
+
+sql = "INSERT INTO CAMION (matricula, fecha_alta, peso_maximo) VALUES ('{matri}', '{fecha}', {peso})"
+cursor = db.cursor()
+
+try:
+    cursor.execute(sql)
+    db.commit()
+except:
+    db.rollback()
+db.close()

@@ -94,3 +94,32 @@ try:
 except:
     db.rollback()
 db.close()
+
+#consultanumero5
+
+try:
+        db = MySQLdb.connect("localhost","jairo","1994","empresa" )
+except MySQLdb.Error as e:
+        print("No se pudo conectar a la base de datos",e)
+        sys.exit(1)
+print("Conectado")
+
+dni = input("Introduce el DNI: ")
+
+cursor = db.cursor()
+sql = "SELECT matricula_camion FROM CAMION_CONDUCTOR WHERE codigo_conductor = ( SELECT codigo FROM CONDUCTOR where DNI = '{dni}')"
+
+try:
+    cursor.execute(sql)
+    resultado = cursor.fetchone()
+    if resultado is not None:
+           matricula_camion = resultado[0]
+           borrar = "DELETE FROM CAMION WHERE matricula = '{matricula_camion}"
+           cursor.execute(sql)
+           db.commit()
+           print("Camión con matrícula {matricula_camion} se ha eliminado correctamente.")
+except:
+        db.rollback()
+        print("No hay camión asignado al DNI {dni}.")
+db.close()
+

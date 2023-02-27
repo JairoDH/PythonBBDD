@@ -1,27 +1,22 @@
 from funcionesbbdd import *
-import MySQLdb
-import sys
 
-try:
-        db = MySQLdb.connect("localhost","jairo","1994","empresa" )
-        
-except MySQLdb.Error as e:
-        print("No se pudo conectar a la base de datos",e)
-        sys.exit(1)
-print("Conectado")
-
+db = conectar_bbdd("localhost","jairo","1994","empresa")
 opcion = menu()
 print (opcion)
-while opcion != 7 : 
+while opcion != 0 : 
     if opcion == 1 :
-        mostrar_trabajadores
+        mostrar_trabajadores(db)
     elif opcion == 2:
-        informacion_telefono
+        informacion_telefono(db)
     elif opcion == 3:
-        informacion_matricula
+        informacion_matricula(db)
     elif opcion == 4:
-        nuevo_camion
+        nuevo_camion(db)
     elif opcion == 5:
-        actualizar_trabajador
+        eliminar_camion(db)
     elif opcion == 6:
+        actualizar_trabajador(db)
+    else:
+        print("Opción incorrecta.")
         opcion = menu()
+desconectar_bbdd(db)

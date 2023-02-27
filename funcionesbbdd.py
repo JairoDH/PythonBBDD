@@ -2,14 +2,15 @@ import MySQLdb
 import sys
 
 #conectarse
-
-try:
-        db = MySQLdb.connect("localhost","jairo","1994","empresa" )
-except MySQLdb.Error as e:
+def conectar_bbdd(host,user,password,database):
+    try:
+        db = MySQLdb.connect(host,user,password,database)
+        return db
+    except MySQLdb.Error as e:
         print("No se pudo conectar a la base de datos",e)
         sys.exit(1)
-print("Conectado")
-
+def desconectar_bbdd(db):
+    db.close()
 
 def menu():
     print("Menu: ")
@@ -19,12 +20,11 @@ def menu():
     print("4. Introducir camión nuevo a la empresa: ")
     print("5. Eliminar camión.")
     print("6. Actualización de los datos del trabajador.")
-    print("7. Salir")
     opcion = int(input("Selecciona una opcion: "))
     return opcion
 
 #consultanumero1
-def mostrar_trabajadores():
+def mostrar_trabajadores(db):
        
     sql = "select c.nombre, c.apellido1, c.provincia, ca.matricula from CAMION_CONDUCTOR cc JOIN CONDUCTOR c ON cc.codigo_conductor = c.codigo JOIN CAMION ca ON cc.matricula_camion = ca.matricula"
     cursor = db.cursor()
@@ -40,7 +40,7 @@ def mostrar_trabajadores():
 
 #consultanumero2
 
-def informacion_telefono():
+def informacion_telefono(db):
     
     codigo = int(input("Introduzca el código del trabajador: "))
 
@@ -48,7 +48,7 @@ def informacion_telefono():
     cursor = db.cursor()
 
     try:     
-        cursor.execute(sql, codigo)
+        cursor.execute(sql,codigo)
         registro = cursor.fetchone()
         while resultado:
             print(registro[0],registro[1],registro[2],registro[3],registro[4],registro[5],registro[6],registro[7],registro[8],registro[9])
@@ -60,7 +60,7 @@ def informacion_telefono():
 
 #consultanumero3
 
-def informacion_matricula():
+def informacion_matricula(db):
 
     matricula_camion = input("Introduzca la matrícula del camión: ")
 
@@ -79,7 +79,7 @@ def informacion_matricula():
 
 #consultanumero4
 
-def nuevo_camion():
+def nuevo_camion(db):
 
     matri = input("Introduce la matrícula (AAAA000): ")
     fecha = input("Introduce la fecha de alta (YYYY-MM-DD): ")
@@ -97,7 +97,7 @@ def nuevo_camion():
 
 #consultanumero5
 
-def eliminar_camion():
+def eliminar_camion(db):
 
     dni = input("Introduce el DNI: ")
 
@@ -121,7 +121,7 @@ def eliminar_camion():
 
 #consultanumero6
 
-def actualizar_trabajador():
+def actualizar_trabajador(db):
 
     nombre = input("Dime el nombre del conductor: ")
     apellido1 = input("Dime el primer apellido del conductor: ")

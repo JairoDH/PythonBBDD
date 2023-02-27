@@ -4,7 +4,12 @@ import sys
 #conectarse
 def conectar_bbdd(host,user,password,database):
     try:
-        db = MySQLdb.connect(host,user,password,database)
+        db = MySQLdb.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+            )
         return db
     except MySQLdb.Error as e:
         print("No se pudo conectar a la base de datos",e)
@@ -35,7 +40,7 @@ def mostrar_trabajadores(db):
             print(registro[0],registro[1],registro[2],registro[3])
         return registros
     except:
-        print("Error en la consulta")
+        print("Error en la consulta.")
   
 
 
@@ -45,7 +50,7 @@ def informacion_telefono(db):
     
     codigo = int(input("Introduzca el código del trabajador: "))
 
-    sql = "SELECT * FROM CONDUCTOR WHERE codigo = %s"
+    sql = "SELECT * FROM CONDUCTOR WHERE codigo = %d"
     cursor = db.cursor()
 
     try:     
@@ -104,21 +109,21 @@ def eliminar_camion(db):
     dni = input("Introduce el DNI: ")
 
 
-    sql = "SELECT matricula_camion FROM CAMION_CONDUCTOR WHERE codigo_conductor = ( SELECT codigo FROM CONDUCTOR where DNI = '{dni}')"
+    sql = "SELECT matricula_camion FROM CAMION_CONDUCTOR WHERE codigo_conductor = ( SELECT codigo FROM CONDUCTOR where DNI = %s)"
     cursor = db.cursor()
 
     try:
-        cursor.execute(sql, dni)
+        cursor.execute(sql, (dni,))
         resultado = cursor.fetchone()
         if resultado is not None:
             matricula_camion = resultado[0]
-            borrar = "DELETE FROM CAMION WHERE matricula = '{matricula_camion}'"
-            cursor.execute(borrar.format(matricula_camion=matricula_camion))
+            borrar = "DELETE FROM CAMION WHERE matricula = %s"
+            cursor.execute(borrar, (matricula_camion))
             db.commit()
-            print("Camión con matrícula {matricula_camion} se ha eliminado correctamente.")
+            print("Camión eliminado correctamente.")
     except:
             db.rollback()
-            print("No hay camión asignado al DNI {dni}.")
+            print("No hay camión asignado al DNI.")
     db.close()
     
 

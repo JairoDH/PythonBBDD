@@ -119,7 +119,8 @@ def eliminar_camion(db):
             matricula_camion = resultado[0]
             borrar = "DELETE FROM CAMION_CONDUCTOR WHERE matricula = '%s'"
             borrar2 = "DELETE FROM CAMION WHERE matricula  = '%s'"
-            cursor.execute(borrar, (matricula_camion))
+            cursor.execute(borrar, (matricula_camion,))
+            cursor.execute(borrar2, (matricula_camion,))
             db.commit()
             print("Camión eliminado correctamente.")
     except:

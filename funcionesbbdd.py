@@ -20,7 +20,7 @@ def desconectar_bbdd(db):
 def menu():
     print("Menu: ")
     print("1. Mostrar trabajadores. ")
-    print("2. Consultar trabajador por su teléfono. ")
+    print("2. Consultar trabajador por el código empleado. ")
     print("3. Mostrar trabajadores asociados por matrícula. ")
     print("4. Introducir camión nuevo a la empresa: ")
     print("5. Eliminar camión.")
@@ -46,7 +46,7 @@ def mostrar_trabajadores(db):
 
 #consultanumero2
 
-def informacion_telefono(db):
+def informacion_codigo(db):
     
     codigo = int(input("Introduzca el código del trabajador: "))
 
@@ -109,7 +109,7 @@ def eliminar_camion(db):
     dni = input("Introduce el DNI: ")
 
 
-    sql = "SELECT matricula_camion FROM CAMION_CONDUCTOR WHERE codigo_conductor = ( SELECT codigo FROM CONDUCTOR where DNI = %s)"
+    sql = "SELECT matricula_camion FROM CAMION_CONDUCTOR WHERE codigo_conductor = ( SELECT codigo FROM CONDUCTOR where DNI = '%s')"
     cursor = db.cursor()
 
     try:
@@ -117,7 +117,8 @@ def eliminar_camion(db):
         resultado = cursor.fetchone()
         if resultado is not None:
             matricula_camion = resultado[0]
-            borrar = "DELETE FROM CAMION WHERE matricula = %s"
+            borrar = "DELETE FROM CAMION_CONDUCTOR WHERE matricula = '%s'"
+            borrar2 = "DELETE FROM CAMION WHERE matricula  = '%s'"
             cursor.execute(borrar, (matricula_camion))
             db.commit()
             print("Camión eliminado correctamente.")
@@ -138,16 +139,16 @@ def actualizar_trabajador(db):
     nuevo_municipio = input("Introduce el nuevo municipio: ")
 
 
-    sql = "UPDATE CONDUCTOR SET telefono = '{nuevo_telefono}', poblacion = '{nuevo_municipio}' WHERE nombre = '{nombre}' AND apellido1 = '{apellido1}'"
+    sql = "UPDATE CONDUCTOR SET telefono = %s, poblacion = %s WHERE nombre = %s AND apellido1 = %s"
     cursor = db.cursor()
 
     try:
         cursor.execute(sql.format(nombre=nombre, apellido1=apellido1, nuevo_telefono=nuevo_telefono, nuevo_municipio=nuevo_municipio))
         if cursor.rowcount == -1:
-            print("No se ha encontrado conductor con el nombre {nombre} {apellido1}.")
+            print("No se ha encontrado conductor con ese nombre.",nombre, apellido1)
         else:
             db.commit()
-            print("Se ha actualizado correctamente el conductor {nombre} {apellido1}.")
+            print("Se ha actualizado correctamente el conductor.", nombre, apellido1)
     except:
         db.rollback()
         print("No se ha podido actualizar el conductor.")

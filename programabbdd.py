@@ -7,7 +7,7 @@ while opcion != 0 :
     if opcion == 1 :
         mostrar_trabajadores(db)
     elif opcion == 2:
-        informacion_telefono(db)
+        informacion_codigo(db)
     elif opcion == 3:
         informacion_matricula(db)
     elif opcion == 4:
@@ -18,5 +18,5 @@ while opcion != 0 :
         actualizar_trabajador(db)
     else:
         print("Opción incorrecta.")
-        opcion = menu()
+    opcion = menu()
 desconectar_bbdd(db)

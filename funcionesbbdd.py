@@ -28,6 +28,7 @@ def menu():
     opcion = int(input("Selecciona una opcion: "))
     return opcion
 
+
 #consultanumero1
 def mostrar_trabajadores(db):
        
@@ -50,7 +51,7 @@ def informacion_codigo(db):
     
     codigo = int(input("Introduzca el código del trabajador: "))
 
-    sql = "SELECT * FROM CONDUCTOR WHERE codigo = %d"
+    sql = "SELECT * FROM CONDUCTOR WHERE codigo = %s"
     cursor = db.cursor()
 
     try:     
@@ -88,7 +89,7 @@ def informacion_matricula(db):
 
 def nuevo_camion(db):
 
-    matri = input("Introduce la matrícula (AAAA000): ")
+    matri = input("Introduce la matrícula (0000AAA): ")
     fecha = input("Introduce la fecha de alta (YYYY-MM-DD): ")
     peso = int(input("Introduce el peso máximo a transportar: "))
 
@@ -109,24 +110,23 @@ def eliminar_camion(db):
     dni = input("Introduce el DNI: ")
 
 
-    sql = "SELECT matricula_camion FROM CAMION_CONDUCTOR WHERE codigo_conductor = ( SELECT codigo FROM CONDUCTOR where DNI = '%s')"
+    sql = "SELECT matricula_camion FROM CAMION_CONDUCTOR WHERE codigo_conductor = ( SELECT codigo FROM CONDUCTOR where DNI = %s)"
     cursor = db.cursor()
 
     try:
-        cursor.execute(sql, (dni,))
+        cursor.execute(sql, (dni))
         resultado = cursor.fetchone()
         if resultado is not None:
             matricula_camion = resultado[0]
-            borrar = "DELETE FROM CAMION_CONDUCTOR WHERE matricula = '%s'"
-            borrar2 = "DELETE FROM CAMION WHERE matricula  = '%s'"
-            cursor.execute(borrar, (matricula_camion,))
-            cursor.execute(borrar2, (matricula_camion,))
+            borrar = "DELETE FROM CAMION_CONDUCTOR WHERE matricula_camion = %s"
+            borrar2 = "DELETE FROM CAMION WHERE matricula  = %s"
+            cursor.execute(borrar, (matricula_camion))
+            cursor.execute(borrar2, (matricula_camion))
             db.commit()
             print("Camión eliminado correctamente.")
-    except:
-            db.rollback()
-            print("No hay camión asignado al DNI.")
-    db.close()
+    except MySQLdb.Error as e:
+        print(e)
+        sys.exit(1)
     
 
 #consultanumero6
@@ -144,8 +144,8 @@ def actualizar_trabajador(db):
     cursor = db.cursor()
 
     try:
-        cursor.execute(sql.format(nombre=nombre, apellido1=apellido1, nuevo_telefono=nuevo_telefono, nuevo_municipio=nuevo_municipio))
-        if cursor.rowcount == -1:
+        cursor.execute(sql, (nuevo_telefono, nuevo_municipio, nombre, apellido1))
+        if cursor.rowcount == 0:
             print("No se ha encontrado conductor con ese nombre.",nombre, apellido1)
         else:
             db.commit()

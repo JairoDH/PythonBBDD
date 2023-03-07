@@ -4,7 +4,7 @@ CREATE TABLE CAMION(
     peso_maximo float(7,2) NOT NULL,
 CONSTRAINT cp_matricula PRIMARY KEY(matricula),
 CONSTRAINT ch_matri CHECK (matricula REGEXP '[0-9]{4}[A-Z][A-Z][A-Z]'),
-CONSTRAINT ch_fechalta CHECK (TO_CHAR(fecha_alta,'YYYY-MM-DD') <= '2020-01-01')
+CONSTRAINT ch_fechalta CHECK (fecha_alta <= '2020-01-01')
 );
 CREATE TABLE CAMION_CONDUCTOR(
     matricula_camion varchar(7),
@@ -28,5 +28,5 @@ CONSTRAINT cp_codi PRIMARY KEY (codigo),
 CONSTRAINT un_dni UNIQUE (DNI),
 CONSTRAINT ch_dni CHECK (DNI REGEXP '[0-9]{8}[A-Z]'),
 CONSTRAINT ch_tele check (telefono REGEXP '^[679][0-9]{8}'),
-CONSTRAINT ch_nom check (binary nombre = UPPER (nombre))
+CONSTRAINT ch_nom check (nombre = UPPER (nombre))
 );
